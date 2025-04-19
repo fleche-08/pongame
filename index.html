@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pong Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <style>
+/* Overlay flouté */
+#shopOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Fenêtre boutique */
+#shopMenu {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+/* Item boutique */
+.shop-item {
+  border: 2px solid #8a2be2;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+/* Bouton achat */
+.buy-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.buy-button:hover {
+  transform: scale(1.05);
+}
+
+/* Masqué de base */
+.hidden {
+  display: none;
+}
+
+
+#shopButton {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  padding: 7px 14px;
+  font-size: 1.2rem;
+  background-color: white;
+  color: #8a2be2;
+  border: none;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+  z-index: 1000;
+}
+
+#shopButton:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+
+#shopButton:hover {
+  background-color: #be6bfa;
+}
+
+#shopOverlay {
+  display: none; /* utile */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px);
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#shopMenu {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  color: black;
+  min-width: 300px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(to bottom, #8a2be2, #d1b3ff);
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.5s ease;
+    }
+
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .play-button {
+      padding: 15px 40px;
+      font-size: 1.5rem;
+      background-color: white;
+      color: #8a2be2;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+    }
+
+    .play-button:hover {
+      background-color: #e0d4ff;
+      transform: scale(1.05);
+    }
+
+    canvas {
+      display: none;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+      background-color: transparent;
+      transition: opacity 0.5s ease;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #score {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 2rem;
+      color: white;
+      pointer-events: none;
+    }
+
+    #gameOverMessage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      color: white;
+      display: none;
+      text-align: center;
+    }
+
+#coinCounter {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+
+#countdown {
+  position: absolute;
+  top: 40%; /* Déplace le timer un peu plus haut */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  color: white;
+  display: none;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+    /* Nouveau style pour feedback animé */
+    #feedback {
+      position: absolute;
+      top: calc(50% + 60px); /* un peu en dessous du timer */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      color: #ffd700;
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    #feedback.show {
+      opacity: 1;
+      transform: translate(-50%, -40%);
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="menu">
+    <h1>PONG GAME</h1>
+    <button class="play-button" id="playBtn">Play</button>
+  </div>
+  <div id="score">0 : 0</div>
+  <div id="coinCounter">💰 Pièces : 0</div>
+  <div id="gameOverMessage"></div>
+  <div id="countdown"></div>
+  <div id="feedback"></div>
+  <canvas id="pong" width="800" height="500"></canvas>
+<!-- SHOP BUTTON -->
+<button id="shopButton">🛒 SHOP</button>
+
+<!-- SHOP MENU + OVERLAY -->
+<div id="shopOverlay" class="hidden">
+  <div id="shopMenu">
+    <h2>Boutique</h2>
+    <div class="shop-item">
+      <h3>Super Charge</h3>
+      <p>Frappez la balle plus vite pendant 5 secondes avec ESPACE</p>
+      <p>Prix : <strong>100 pièces</strong></p>
+      <button class="buy-button" onclick="buySuperCharge()">Acheter</button>
+    </div>
+    <button id="closeShop" class="buy-button" style="margin-top:20px;">Fermer</button>
+  </div>
+</div>
+
+
+<script>
+
+  const playBtn = document.getElementById('playBtn');
+  const menu = document.getElementById('menu');
+  const canvas = document.getElementById('pong');
+  const ctx = canvas.getContext('2d');
+  const scoreDisplay = document.getElementById('score');
+  const gameOverMessage = document.getElementById('gameOverMessage');
+  const countdown = document.getElementById('countdown');
+  const feedback = document.getElementById('feedback');
+  const shopButton = document.getElementById("shopButton");
+  const shopOverlay = document.getElementById("shopOverlay");
+  const closeShop = document.getElementById("closeShop");
+
+shopButton.addEventListener("click", () => {
+  shopOverlay.style.display = "flex";
+});
+
+closeShop.addEventListener("click", () => {
+  shopOverlay.style.display = "none";
+});
+
+
+  let playerY = canvas.height / 2 - 40;
+  let aiY = canvas.height / 2 - 40;
+  const paddleHeight = 80;
+  const paddleWidth = 10;
+  const ballSize = 10;
+  let ballX, ballY, ballSpeedX, ballSpeedY;
+  let playerScore = 0;
+  let aiScore = 0;
+  let currentSpeed = 4;
+  let gameRunning = true;
+  let countdownValue = 3;
+
+
+function resetBall() {
+  ballX = canvas.width / 2;
+  ballY = canvas.height / 2;
+  currentSpeed += 0.5;
+
+  // Choisir une direction aléatoire pour la balle au début de chaque manche
+  // La balle partira soit vers la droite, soit vers la gauche (sans diagonale)
+  ballSpeedX = Math.random() > 0.5 ? currentSpeed : -currentSpeed;
+  ballSpeedY = 0;  // La balle ne part pas en diagonale, uniquement sur l'axe X
+
+  // Réinitialiser la position de l'IA au centre
+  aiY = canvas.height / 2 - paddleHeight / 2;
+}
+
+let coins = 0;
+let hasSuperCharge = false;
+let superChargeActive = false;
+
+// Afficher le menu
+document.getElementById('shopButton').onclick = () => {
+  document.getElementById('shopOverlay').classList.remove('hidden');
+};
+
+// Fermer le menu
+document.getElementById('closeShop').onclick = () => {
+  document.getElementById('shopOverlay').classList.add('hidden');
+};
+
+// Fonction achat
+function buySuperCharge() {
+  if (coins >= 100 && !hasSuperCharge) {
+    coins -= 100;
+    hasSuperCharge = true;
+    updateCoinsDisplay();
+    alert("Super Charge achetée !");
+  } else if (hasSuperCharge) {
+    alert("Tu possèdes déjà Super Charge !");
+  } else {
+    alert("Pas assez de pièces !");
+  }
+}
+
+// Activation de Super Charge
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" && hasSuperCharge && !superChargeActive && gameStarted) {
+    superChargeActive = true;
+    playerPaddle.color = "red";
+    setTimeout(() => {
+      playerPaddle.color = "white";
+      superChargeActive = false;
+    }, 5000);
+  }
+});
+
+// Boost quand on tape la balle pendant super charge
+function checkCollision() {
+  // collision habituelle ici...
+  if (superChargeActive && ball.directionX < 0) {
+    ball.speedX *= 2.5;
+    ball.speedY *= 1.5;
+    superChargeActive = false;
+    playerPaddle.color = "white";
+  }
+}
+
+
+function updateCoinDisplay() {
+  document.getElementById("coinCounter").textContent = `💰 Pièces : ${coins}`;
+}
+
+updateCoinDisplay(); // affiche au démarrage
+
+
+  playBtn.addEventListener('click', () => {
+    menu.style.opacity = 0;
+    setTimeout(() => {
+      menu.style.display = 'none';
+      canvas.style.display = 'block';
+      canvas.style.opacity = 0;
+      setTimeout(() => {
+        canvas.style.opacity = 1;
+        startGame();
+      }, 10);
+    }, 500);
+  });
+
+  function drawRect(x, y, w, h, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+  }
+
+  function drawBall(x, y, size, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, Math.PI * 2, false);
+    ctx.fill();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawRect(10, playerY, paddleWidth, paddleHeight, 'white');
+    drawRect(canvas.width - 20, aiY, paddleWidth, paddleHeight, 'white');
+    drawBall(ballX, ballY, ballSize, 'white');
+  }
+
+  function update() {
+    if (!gameRunning) return;
+
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+
+    if (ballY <= 0 || ballY + ballSize >= canvas.height) {
+      ballSpeedY *= -1;
+    }
+
+    if (
+      ballX <= 20 &&
+      ballY + ballSize >= playerY &&
+      ballY <= playerY + paddleHeight
+    ) {
+      ballSpeedX = Math.abs(ballSpeedX);
+      ballSpeedY = Math.random() * 4 - 2;
+    }
+
+    if (
+      ballX + ballSize >= canvas.width - 20 &&
+      ballY + ballSize >= aiY &&
+      ballY <= aiY + paddleHeight
+    ) {
+      ballSpeedX = -Math.abs(ballSpeedX);
+      ballSpeedY = Math.random() * 4 - 2;
+    }
+
+    if (ballX < 0) {
+      aiScore++;
+      updateScore();
+      checkGameOver();
+      if (gameRunning) {
+        resetBall(); // On remet la balle à sa position de départ ici
+        showCountdown(); // Puis on lance le décompte
+      }
+    }
+
+    if (ballX > canvas.width) {
+      playerScore++;
+      updateScore();
+      showFeedback();
+      checkGameOver();
+      if (gameRunning) {
+        resetBall(); // On remet la balle à sa position de départ ici
+        showCountdown(); // Puis on lance le décompte
+      }
+    }
+
+    const aiCenter = aiY + paddleHeight / 2;
+    aiY += aiCenter < ballY ? 1.2 : -1.2;
+    aiY = Math.max(0, Math.min(canvas.height - paddleHeight, aiY));
+  }
+
+  function updateScore() {
+    scoreDisplay.textContent = `${playerScore} : ${aiScore}`;
+  }
+
+
+
+function checkGameOver() {
+  if (playerScore >= 5 || aiScore >= 5) {
+    gameRunning = false;
+    gameOverMessage.textContent = playerScore > aiScore ? "Vous avez gagné !" : "L'IA a gagné !";
+    gameOverMessage.style.display = 'block';
+    setTimeout(() => {
+      canvas.style.opacity = 0;
+      setTimeout(() => {
+        canvas.style.display = 'none';
+        gameOverMessage.style.display = 'none';
+        menu.style.display = 'flex';
+        playerScore = 0;
+        aiScore = 0;
+        currentSpeed = 4; // ✅ ← Ajout ici
+        updateScore();
+        coins += 50;
+        localStorage.setItem("coins", coins);
+        updateCoinDisplay();
+        menu.style.opacity = 1;
+      }, 500);
+    }, 2000);
+  }
+}
+
+
+
+function showCountdown() {
+  countdown.style.display = 'block';
+  countdownValue = 3;
+  countdown.textContent = countdownValue;
+
+  // Ajouter une légère ombre portée au texte
+  countdown.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.5)';
+
+  gameRunning = false; // On arrête le jeu pendant le compte à rebours
+  const countdownInterval = setInterval(() => {
+    countdownValue--;
+    countdown.textContent = countdownValue;
+    if (countdownValue === 0) {
+      clearInterval(countdownInterval);
+      countdown.style.display = 'none';
+      gameRunning = true; // Le jeu peut reprendre après le compte à rebours
+      gameLoop(); // Relance la boucle du jeu
+    }
+  }, 1000);
+}
+
+
+  function showFeedback() {
+    const messages = ["Great!", "Nice!", "Good!", "Well done!"];
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    feedback.textContent = msg;
+    feedback.classList.add('show');
+    setTimeout(() => {
+      feedback.classList.remove('show');
+    }, 1000);
+  }
+
+  function gameLoop() {
+    update();
+    draw();
+    if (gameRunning) requestAnimationFrame(gameLoop);
+  }
+
+  function startGame() {
+    resetBall();
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      playerY = e.clientY - rect.top - paddleHeight / 2;
+      playerY = Math.max(0, Math.min(canvas.height - paddleHeight, playerY));
+    });
+    showCountdown(); // Démarre le compte à rebours dès que le jeu commence
+  }
+
+
+</script>
+
+
+</body>
+</html>
