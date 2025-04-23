@@ -266,7 +266,6 @@
 
 
 <script>
-
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
   const canvas = document.getElementById('pong');
@@ -373,7 +372,7 @@ function updateCoinDisplay() {
 
 updateCoinDisplay(); // affiche au démarrage
 
-
+document.getElementById('bgMusic').volume = 0.5;
 const bgMusic = document.getElementById('bgMusic');
 
 playBtn.addEventListener('click', () => {
