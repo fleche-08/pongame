@@ -398,6 +398,7 @@ playBtn.addEventListener('click', () => {
 });
 
 
+const sonMarque = new Audio("pongamemarqué.MP3");
 
   function drawRect(x, y, w, h, color) {
     ctx.fillStyle = color;
@@ -455,6 +456,19 @@ playBtn.addEventListener('click', () => {
         showCountdown(); // Puis on lance le décompte
       }
     }
+
+  if (ballX > canvas.width) {
+    playerScore++;
+    sonMarque.play(); // ← jouer le son ici !
+    increaseBallSpeed();
+    updateScore();
+    showFeedback();
+    checkGameOver();
+    if (gameRunning) {
+      resetBall();
+      showCountdown();
+    }
+  }
 
     if (ballX > canvas.width) {
       playerScore++;
