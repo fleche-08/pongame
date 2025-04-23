@@ -549,15 +549,22 @@ function showCountdown() {
     if (gameRunning) requestAnimationFrame(gameLoop);
   }
 
-  function startGame() {
-    resetBall();
-    canvas.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      playerY = e.clientY - rect.top - paddleHeight / 2;
-      playerY = Math.max(0, Math.min(canvas.height - paddleHeight, playerY));
-    });
-    showCountdown(); // Démarre le compte à rebours dès que le jeu commence
-  }
+function startGame() {
+  resetBall();
+  // réinitialiser aussi les paddles
+  playerY = canvas.height/2 - paddleHeight/2;
+  aiY     = canvas.height/2 - paddleHeight/2;
+
+  draw();            // ← affiche tout de suite paddles + balle  
+  showCountdown();   // ← puis lance ton compte à rebours
+
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    playerY = e.clientY - rect.top - paddleHeight/2;
+    playerY = Math.max(0, Math.min(canvas.height - paddleHeight, playerY));
+  });
+}
+
 
 
 </script>
