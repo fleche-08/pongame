@@ -550,11 +550,14 @@ function showCountdown() {
     }, 1000);
   }
 
-  function gameLoop() {
-    update();
-    draw();
-    if (gameRunning) requestAnimationFrame(gameLoop);
-  }
+function gameLoop() {
+  if (!gameRunning) return;
+
+  update(); // met à jour les positions
+  draw();   // dessine le jeu
+
+  requestAnimationFrame(gameLoop); // boucle tant que gameRunning est true
+}
 
   function startGame() {
     resetBall();
