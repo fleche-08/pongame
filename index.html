@@ -521,7 +521,6 @@ function showCountdown() {
   countdownValue = 3;
   countdown.textContent = countdownValue;
 
-  // Ajouter une légère ombre portée au texte
   countdown.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.5)';
 
   gameRunning = false; // On arrête le jeu pendant le compte à rebours
@@ -531,11 +530,14 @@ function showCountdown() {
     if (countdownValue === 0) {
       clearInterval(countdownInterval);
       countdown.style.display = 'none';
-      gameRunning = true; // Le jeu peut reprendre après le compte à rebours
-      gameLoop(); // Relance la boucle du jeu
+      gameRunning = true;
+
+      // ✅ On relance la boucle du jeu ici
+      requestAnimationFrame(gameLoop);
     }
   }, 1000);
 }
+
 
 
   function showFeedback() {
