@@ -447,15 +447,19 @@ const sonMarque = new Audio("pongamemarqué.MP3");
       ballSpeedY = Math.random() * 4 - 2;
     }
 
-    if (ballX < 0) {
-      aiScore++;
-      updateScore();
-      checkGameOver();
-      if (gameRunning) {
-        resetBall(); // On remet la balle à sa position de départ ici
-        showCountdown(); // Puis on lance le décompte
-      }
-    }
+if (ballX > canvas.width) {
+  playerScore++;
+  increaseBallSpeed();
+  updateScore();
+  if (gameRunning) {
+    sonMarque.play(); // ← on joue le son que si le jeu n'est pas fini
+    showFeedback();
+    resetBall();
+    showCountdown();
+  }
+  checkGameOver(); // vérif toujours après
+}
+
 
   if (ballX > canvas.width) {
     playerScore++;
