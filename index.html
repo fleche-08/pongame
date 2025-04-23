@@ -456,6 +456,7 @@ playBtn.addEventListener('click', () => {
       if (gameRunning) {
         resetBall(); // On remet la balle à sa position de départ ici
         showCountdown(); // Puis on lance le décompte
+        gameLoop()
       }
     }
 
@@ -471,6 +472,7 @@ if (ballX > canvas.width) {
   showFeedback();
   checkGameOver();
   if (gameRunning) {
+    gameLoop()
     resetBall();
     showCountdown();
   }
