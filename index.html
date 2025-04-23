@@ -269,8 +269,7 @@
 
 
 <script>
-const sonMarque = new Audio("pongamemarqué.MP3");
-sonMarque.preload = "auto";
+  const scoreSound = document.getElementById("scoreSound"); // C'est votre élément audio
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
   const canvas = document.getElementById('pong');
@@ -457,20 +456,16 @@ playBtn.addEventListener('click', () => {
       }
     }
 
-if (ballX > canvas.width) {
-  playerScore++;
-  increaseBallSpeed();
-  updateScore();
-  sonMarque.currentTime = 0;
-  sonMarque.play().catch(e => console.warn("Erreur lecture son : ", e));
-  showFeedback();
-  checkGameOver();
-  if (gameRunning) {
-    resetBall();
-    showCountdown();
-  }
-}
-
+    if (ballX > canvas.width) {
+      playerScore++;
+      updateScore();
+      showFeedback();
+      checkGameOver();
+      if (gameRunning) {
+        resetBall(); // On remet la balle à sa position de départ ici
+        showCountdown(); // Puis on lance le décompte
+      }
+    }
 
     const aiCenter = aiY + paddleHeight / 2;
     aiY += aiCenter < ballY ? 1.2 : -1.2;
