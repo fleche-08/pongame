@@ -233,6 +233,9 @@
   </style>
 </head>
 <body>
+<audio id="scoreSound">
+  <source src="pongamemarqué.MP3" type="audio/mpeg">
+</audio>
 <audio id="bgMusic" loop>
   <source src="pangya-teatime.mp3" type="audio/mpeg">
   Ton navigateur ne supporte pas l’audio HTML5.
@@ -266,6 +269,7 @@
 
 
 <script>
+  const scoreSound = document.getElementById("scoreSound"); // C'est votre élément audio
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
   const canvas = document.getElementById('pong');
@@ -395,82 +399,100 @@ playBtn.addEventListener('click', () => {
 
 
 
-  function drawRect(x, y, w, h, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
+// Valeur initiale plus rapide
+let initialBallSpeedX = 6;
+let initialBallSpeedY = 4;
+
+// Variables de vitesse actuelles
+let ballSpeedX = initialBallSpeedX;
+let ballSpeedY = initialBallSpeedY;
+
+function drawRect(x, y, w, h, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, w, h);
+}
+
+function drawBall(x, y, size, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x, y, size, 0, Math.PI * 2, false);
+  ctx.fill();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawRect(10, playerY, paddleWidth, paddleHeight, 'white');
+  drawRect(canvas.width - 20, aiY, paddleWidth, paddleHeight, 'white');
+  drawBall(ballX, ballY, ballSize, 'white');
+}
+
+function update() {
+  if (!gameRunning) return;
+
+  ballX += ballSpeedX;
+  ballY += ballSpeedY;
+
+  if (ballY <= 0 || ballY + ballSize >= canvas.height) {
+    ballSpeedY *= -1;
   }
 
-  function drawBall(x, y, size, color) {
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(x, y, size, 0, Math.PI * 2, false);
-    ctx.fill();
+  if (
+    ballX <= 20 &&
+    ballY + ballSize >= playerY &&
+    ballY <= playerY + paddleHeight
+  ) {
+    ballSpeedX = Math.abs(ballSpeedX);
+    ballSpeedY = Math.random() * 4 - 2;
   }
 
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawRect(10, playerY, paddleWidth, paddleHeight, 'white');
-    drawRect(canvas.width - 20, aiY, paddleWidth, paddleHeight, 'white');
-    drawBall(ballX, ballY, ballSize, 'white');
+  if (
+    ballX + ballSize >= canvas.width - 20 &&
+    ballY + ballSize >= aiY &&
+    ballY <= aiY + paddleHeight
+  ) {
+    ballSpeedX = -Math.abs(ballSpeedX);
+    ballSpeedY = Math.random() * 4 - 2;
   }
 
-  function update() {
-    if (!gameRunning) return;
-
-    ballX += ballSpeedX;
-    ballY += ballSpeedY;
-
-    if (ballY <= 0 || ballY + ballSize >= canvas.height) {
-      ballSpeedY *= -1;
+  if (ballX < 0) {
+    aiScore++;
+    increaseBallSpeed();
+    updateScore();
+    checkGameOver();
+    if (gameRunning) {
+      resetBall();
+      showCountdown();
     }
-
-    if (
-      ballX <= 20 &&
-      ballY + ballSize >= playerY &&
-      ballY <= playerY + paddleHeight
-    ) {
-      ballSpeedX = Math.abs(ballSpeedX);
-      ballSpeedY = Math.random() * 4 - 2;
-    }
-
-    if (
-      ballX + ballSize >= canvas.width - 20 &&
-      ballY + ballSize >= aiY &&
-      ballY <= aiY + paddleHeight
-    ) {
-      ballSpeedX = -Math.abs(ballSpeedX);
-      ballSpeedY = Math.random() * 4 - 2;
-    }
-
-    if (ballX < 0) {
-      aiScore++;
-      updateScore();
-      checkGameOver();
-      if (gameRunning) {
-        resetBall(); // On remet la balle à sa position de départ ici
-        showCountdown(); // Puis on lance le décompte
-      }
-    }
-
-    if (ballX > canvas.width) {
-      playerScore++;
-      updateScore();
-      showFeedback();
-      checkGameOver();
-      if (gameRunning) {
-        resetBall(); // On remet la balle à sa position de départ ici
-        showCountdown(); // Puis on lance le décompte
-      }
-    }
-
-    const aiCenter = aiY + paddleHeight / 2;
-    aiY += aiCenter < ballY ? 1.2 : -1.2;
-    aiY = Math.max(0, Math.min(canvas.height - paddleHeight, aiY));
   }
 
-  function updateScore() {
-    scoreDisplay.textContent = `${playerScore} : ${aiScore}`;
+  if (ballX > canvas.width) {
+    playerScore++;
+    increaseBallSpeed();
+    updateScore();
+    showFeedback();
+    checkGameOver();
+    if (gameRunning) {
+      resetBall();
+      showCountdown();
+    }
   }
+
+  const aiCenter = aiY + paddleHeight / 2;
+  aiY += aiCenter < ballY ? 1.2 : -1.2;
+  aiY = Math.max(0, Math.min(canvas.height - paddleHeight, aiY));
+}
+
+function updateScore() {
+  scoreDisplay.textContent = `${playerScore} : ${aiScore}`;
+}
+
+// Nouvelle fonction pour accélérer la balle
+function increaseBallSpeed() {
+  const acceleration = 0.5;
+  ballSpeedX += (ballSpeedX > 0 ? acceleration : -acceleration);
+  ballSpeedY += (ballSpeedY > 0 ? acceleration / 2 : -acceleration / 2);
+}
+
 
 
 
