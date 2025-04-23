@@ -233,7 +233,7 @@
   </style>
 </head>
 <body>
-<audio autoplay loop>
+<audio id="bgMusic" loop>
   <source src="pangya-teatime.mp3" type="audio/mpeg">
   Ton navigateur ne supporte pas l’audio HTML5.
 </audio>
@@ -374,18 +374,27 @@ function updateCoinDisplay() {
 updateCoinDisplay(); // affiche au démarrage
 
 
-  playBtn.addEventListener('click', () => {
-    menu.style.opacity = 0;
-    setTimeout(() => {
-      menu.style.display = 'none';
-      canvas.style.display = 'block';
-      canvas.style.opacity = 0;
-      setTimeout(() => {
-        canvas.style.opacity = 1;
-        startGame();
-      }, 10);
-    }, 500);
+const bgMusic = document.getElementById('bgMusic');
+
+playBtn.addEventListener('click', () => {
+  bgMusic.play().catch(e => {
+    console.warn("Audio bloqué :", e);
+    console.log("La musique ne peut démarrer que suite à une interaction utilisateur");
   });
+
+  menu.style.opacity = 0;
+  setTimeout(() => {
+    menu.style.display = 'none';
+    canvas.style.display = 'block';
+    canvas.style.opacity = 0;
+    setTimeout(() => {
+      canvas.style.opacity = 1;
+      startGame();
+    }, 10);
+  }, 500);
+});
+
+
 
   function drawRect(x, y, w, h, color) {
     ctx.fillStyle = color;
