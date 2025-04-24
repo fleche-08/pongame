@@ -249,7 +249,8 @@
   <div id="gameOverMessage"></div>
   <div id="countdown"></div>
   <div id="feedback"></div>
-  <canvas id="pong" width="800" height="500"></canvas>
+  <canvas id="pong" width="800" height="500"></canvas> <!-- c'est en lien avec la boutique après ça
+
 <!-- SHOP BUTTON -->
 <button id="shopButton">🛒 SHOP</button>
 
@@ -257,15 +258,38 @@
 <div id="shopOverlay" class="hidden">
   <div id="shopMenu">
     <h2>Boutique</h2>
-    <div class="shop-item">
-      <h3>Super Charge</h3>
-      <p>Frappez la balle plus vite pendant 5 secondes avec ESPACE</p>
-      <p>Prix : <strong>100 pièces</strong></p>
-      <button class="buy-button" onclick="buySuperCharge()">Acheter</button>
+
+    <!-- Onglets -->
+    <div id="tabs">
+      <button id="tabCompetence" class="tab-button">Compétence</button>
+      <button id="tabApparence" class="tab-button">Apparence</button>
     </div>
+
+    <!-- Section Compétence -->
+    <div id="competenceTab" class="shop-tab">
+      <div class="shop-item">
+        <h3>Super Charge</h3>
+        <p>Frappez la balle plus vite pendant 5 secondes avec ESPACE</p>
+        <p>Prix : <strong>100 pièces</strong></p>
+        <button class="buy-button" onclick="buySuperCharge()">Acheter</button>
+      </div>
+    </div>
+
+    <!-- Section Apparence -->
+    <div id="apparenceTab" class="shop-tab" style="display:none;">
+      <div class="shop-item">
+        <h3>Skin de Balle</h3>
+        <p>Changez l'apparence de la balle pour 200 pièces</p>
+        <p>Prix : <strong>200 pièces</strong></p>
+        <button class="buy-button" onclick="buyBallSkin()">Acheter</button>
+      </div>
+      <!-- Ajoute d'autres items d'apparence ici -->
+    </div>
+
     <button id="closeShop" class="buy-button" style="margin-top:20px;">Fermer</button>
   </div>
 </div>
+
 
 
 <script>
