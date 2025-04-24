@@ -369,6 +369,7 @@ function checkCollision() {
   }
 }
 
+let coins = parseInt(localStorage.getItem('coins')) || 0;
 
 function updateCoinDisplay() {
   document.getElementById("coinCounter").textContent = `💰 Pièces : ${coins}`;
@@ -495,13 +496,14 @@ function checkGameOver() {
         currentSpeed = 4; // ✅ ← Ajout ici
         updateScore();
         coins += 50;
-        localStorage.setItem("coins", coins);
+        localStorage.setItem("coins", coins); // Une seule fois
         updateCoinDisplay();
         menu.style.opacity = 1;
       }, 500);
     }, 2000);
   }
 }
+
 
 
 
