@@ -269,7 +269,6 @@
 
 
 <script>
-// Déclare le son en haut de ton script, avant tout :
   const scoreSound = document.getElementById("scoreSound"); // C'est votre élément audio
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
@@ -454,28 +453,19 @@ playBtn.addEventListener('click', () => {
       if (gameRunning) {
         resetBall(); // On remet la balle à sa position de départ ici
         showCountdown(); // Puis on lance le décompte
-        gameLoop()
       }
     }
 
-if (ballX > canvas.width) {
-  playerScore++;
-  
-  // Joue le son une fois dès que le joueur marque
-  sonMarque.currentTime = 0;
-  sonMarque.play().catch(e => console.warn("Erreur lecture son :", e));
-
-  increaseBallSpeed();
-  updateScore();
-  showFeedback();
-  checkGameOver();
-  if (gameRunning) {
-    gameLoop()
-    resetBall();
-    showCountdown();
-  }
-}
-
+    if (ballX > canvas.width) {
+      playerScore++;
+      updateScore();
+      showFeedback();
+      checkGameOver();
+      if (gameRunning) {
+        resetBall(); // On remet la balle à sa position de départ ici
+        showCountdown(); // Puis on lance le décompte
+      }
+    }
 
     const aiCenter = aiY + paddleHeight / 2;
     aiY += aiCenter < ballY ? 1.2 : -1.2;
@@ -519,6 +509,7 @@ function showCountdown() {
   countdownValue = 3;
   countdown.textContent = countdownValue;
 
+  // Ajouter une légère ombre portée au texte
   countdown.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.5)';
 
   gameRunning = false; // On arrête le jeu pendant le compte à rebours
@@ -528,14 +519,11 @@ function showCountdown() {
     if (countdownValue === 0) {
       clearInterval(countdownInterval);
       countdown.style.display = 'none';
-      gameRunning = true;
-
-      // ✅ On relance la boucle du jeu ici
-      requestAnimationFrame(gameLoop);
+      gameRunning = true; // Le jeu peut reprendre après le compte à rebours
+      gameLoop(); // Relance la boucle du jeu
     }
   }, 1000);
 }
-
 
 
   function showFeedback() {
@@ -548,14 +536,11 @@ function showCountdown() {
     }, 1000);
   }
 
-function gameLoop() {
-  if (!gameRunning) return;
-
-  update(); // met à jour les positions
-  draw();   // dessine le jeu
-
-  requestAnimationFrame(gameLoop); // boucle tant que gameRunning est true
-}
+  function gameLoop() {
+    update();
+    draw();
+    if (gameRunning) requestAnimationFrame(gameLoop);
+  }
 
   function startGame() {
     resetBall();
