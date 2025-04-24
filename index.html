@@ -526,8 +526,45 @@ function checkGameOver() {
   }
 }
 
+//--------------------------------------------------------------------------BOUTIQUE SCRIPT :
 
+// Ouverture de la boutique
+document.getElementById('shopButton').addEventListener('click', () => {
+  document.getElementById('shopOverlay').classList.remove('hidden');
+  showTab('competenceTab'); // On commence sur l'onglet compétence par défaut
+});
 
+// Fermeture de la boutique
+document.getElementById('closeShop').addEventListener('click', () => {
+  document.getElementById('shopOverlay').classList.add('hidden');
+});
+
+// Changer d'onglet
+document.getElementById('tabCompetence').addEventListener('click', () => {
+  showTab('competenceTab'); // Afficher l'onglet compétence
+});
+
+document.getElementById('tabApparence').addEventListener('click', () => {
+  showTab('apparenceTab'); // Afficher l'onglet apparence
+});
+
+// Fonction pour afficher l'onglet sélectionné
+function showTab(tabId) {
+  // Cache tous les onglets
+  const tabs = document.querySelectorAll('.shop-tab');
+  tabs.forEach(tab => tab.style.display = 'none');  // Cache tous les onglets
+
+  // Affiche l'onglet sélectionné
+  const activeTab = document.getElementById(tabId);
+  if (activeTab) {
+    activeTab.style.display = 'block';  // Affiche l'onglet actif
+  }
+}
+
+// Par défaut, affiche l'onglet "Compétence"
+showTab('competenceTab');
+
+//--------------------------------------------------------------------------BOUTIQUE SCRIPT
 
 function showCountdown() {
   countdown.style.display = 'block';
