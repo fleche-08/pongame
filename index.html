@@ -269,7 +269,7 @@
 
 
 <script>
-  const scoreSound = document.getElementById("scoreSound"); // C'est votre élément audio
+  const scoreSound = new Audio("pongamemarqué.MP3"); // mets le bon chemin
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
   const canvas = document.getElementById('pong');
@@ -458,6 +458,7 @@ playBtn.addEventListener('click', () => {
 
     if (ballX > canvas.width) {
       playerScore++;
+      scoreSound.play();
       updateScore();
       showFeedback();
       checkGameOver();
