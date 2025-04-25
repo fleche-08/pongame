@@ -249,8 +249,7 @@
   <div id="gameOverMessage"></div>
   <div id="countdown"></div>
   <div id="feedback"></div>
-  <canvas id="pong" width="800" height="500"></canvas> <!-- c'est en lien avec la boutique après ça
-
+  <canvas id="pong" width="800" height="500"></canvas>
 <!-- SHOP BUTTON -->
 <button id="shopButton">🛒 SHOP</button>
 
@@ -258,38 +257,15 @@
 <div id="shopOverlay" class="hidden">
   <div id="shopMenu">
     <h2>Boutique</h2>
-
-    <!-- Onglets -->
-    <div id="tabs">
-      <button id="tabCompetence" class="tab-button">Compétence</button>
-      <button id="tabApparence" class="tab-button">Apparence</button>
+    <div class="shop-item">
+      <h3>Fond bleu</h3>
+      <p>Le fond du jeu deviens bleu</p>
+      <p>Prix : <strong>100 pièces</strong></p>
+      <button class="buy-button" onclick="buySuperCharge()">Acheter</button>
     </div>
-
-    <!-- Section Compétence -->
-    <div id="competenceTab" class="shop-tab">
-      <div class="shop-item">
-        <h3>Super Charge</h3>
-        <p>Frappez la balle plus vite pendant 5 secondes avec ESPACE</p>
-        <p>Prix : <strong>100 pièces</strong></p>
-        <button class="buy-button" onclick="buySuperCharge()">Acheter</button>
-      </div>
-    </div>
-
-    <!-- Section Apparence -->
-    <div id="apparenceTab" class="shop-tab" style="display:none;">
-      <div class="shop-item">
-        <h3>Arrière plan bleu</h3>
-        <p>Changez la couleur du fond en bleu</p>
-        <p>Prix : <strong>100 pièces</strong></p>
-        <button class="buy-button" onclick="buyBallSkin()">Acheter</button>
-      </div>
-      <!-- Ajoute d'autres items d'apparence ici -->
-    </div>
-
     <button id="closeShop" class="buy-button" style="margin-top:20px;">Fermer</button>
   </div>
 </div>
-
 
 
 <script>
@@ -356,42 +332,32 @@ document.getElementById('closeShop').onclick = () => {
   document.getElementById('shopOverlay').classList.add('hidden');
 };
 
-// Fonction achat
+// Fonction achat BOUTIQUE ----------------------------
 function buySuperCharge() {
-  if (coins >= 100 && !hasSuperCharge) {
+  let coins = parseInt(localStorage.getItem("coins") || "0");
+
+  if (localStorage.getItem("boughtBlueBackground")) {
+    alert("Tu possèdes déjà cet item !");
+    return;
+  }
+
+  if (coins >= 100) {
     coins -= 100;
-    hasSuperCharge = true;
-    updateCoinsDisplay();
-    alert("Super Charge achetée !");
-  } else if (hasSuperCharge) {
-    alert("Tu possèdes déjà Super Charge !");
+    localStorage.setItem("coins", coins);
+    localStorage.setItem("boughtBlueBackground", "true");
+    document.getElementById("coinCounter").textContent = "💰 Pièces : " + coins;
+
+    // Appliquer le fond bleu maintenant
+    document.body.style.background = "linear-gradient(to bottom, #00bfff, #87cefa)";
+
+    alert("Achat effectué ! Fond bleu activé.");
   } else {
     alert("Pas assez de pièces !");
   }
 }
 
-// Activation de Super Charge
-document.addEventListener("keydown", (e) => {
-  if (e.code === "Space" && hasSuperCharge && !superChargeActive && gameStarted) {
-    superChargeActive = true;
-    playerPaddle.color = "red";
-    setTimeout(() => {
-      playerPaddle.color = "white";
-      superChargeActive = false;
-    }, 5000);
-  }
-});
 
-// Boost quand on tape la balle pendant super charge
-function checkCollision() {
-  // collision habituelle ici...
-  if (superChargeActive && ball.directionX < 0) {
-    ball.speedX *= 2.5;
-    ball.speedY *= 1.5;
-    superChargeActive = false;
-    playerPaddle.color = "white";
-  }
-}
+
 
 function updateCoinDisplay() {
   document.getElementById("coinCounter").textContent = `💰 Pièces : ${coins}`;
@@ -399,7 +365,7 @@ function updateCoinDisplay() {
 
 updateCoinDisplay(); // affiche au démarrage
 
-document.getElementById('bgMusic').volume = 0.2;
+document.getElementById('bgMusic').volume = 0.3;
 const bgMusic = document.getElementById('bgMusic');
 
 playBtn.addEventListener('click', () => {
@@ -526,45 +492,8 @@ function checkGameOver() {
   }
 }
 
-//--------------------------------------------------------------------------BOUTIQUE SCRIPT :
 
-// Ouverture de la boutique
-document.getElementById('shopButton').addEventListener('click', () => {
-  document.getElementById('shopOverlay').classList.remove('hidden');
-  showTab('competenceTab'); // On commence sur l'onglet compétence par défaut
-});
 
-// Fermeture de la boutique
-document.getElementById('closeShop').addEventListener('click', () => {
-  document.getElementById('shopOverlay').classList.add('hidden');
-});
-
-// Changer d'onglet
-document.getElementById('tabCompetence').addEventListener('click', () => {
-  showTab('competenceTab'); // Afficher l'onglet compétence
-});
-
-document.getElementById('tabApparence').addEventListener('click', () => {
-  showTab('apparenceTab'); // Afficher l'onglet apparence
-});
-
-// Fonction pour afficher l'onglet sélectionné
-function showTab(tabId) {
-  // Cache tous les onglets
-  const tabs = document.querySelectorAll('.shop-tab');
-  tabs.forEach(tab => tab.style.display = 'none');  // Cache tous les onglets
-
-  // Affiche l'onglet sélectionné
-  const activeTab = document.getElementById(tabId);
-  if (activeTab) {
-    activeTab.style.display = 'block';  // Affiche l'onglet actif
-  }
-}
-
-// Par défaut, affiche l'onglet "Compétence"
-showTab('competenceTab');
-
-//--------------------------------------------------------------------------BOUTIQUE SCRIPT
 
 function showCountdown() {
   countdown.style.display = 'block';
