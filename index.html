@@ -78,8 +78,19 @@
 }
 
 #shopButton:hover {
-  background-color: #f0f0f0;
+  position: absolute;
+  top: 10px;
+  left: 20px;
   transform: scale(1.05);
+  padding: 7px 14px;
+  font-size: 1.2rem;
+  background-color: white;
+  color: #8a2be2;
+  border: none;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+  z-index: 1000;
 }
 
 
@@ -113,6 +124,7 @@
 }
 
     body {
+
       margin: 0;
       height: 100vh;
       background: linear-gradient(to bottom, #8a2be2, #d1b3ff);
@@ -149,14 +161,37 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      transition: transform 0.2s, background-color 0.3s;
+      transition: transform 0.2s, background-color 0.3s; color 0.5s;
     }
 
-    .play-button:hover {
-      background-color: #e0d4ff;
-      transform: scale(1.05);
-    }
+.payment-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px 40px;
+  border-radius: 10px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #00bfff;
+  box-shadow: 0 0 20px #00bfff80;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+  z-index: 9999;
+}
 
+.play-button:hover {
+  padding: 15px 40px;
+  transform: scale(1.05);
+  font-size: 1.5rem;
+  background-color: white;
+  color: #8a2be2;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s, color 0.5s;
+}
     canvas {
       display: none;
       border: 2px solid rgba(255, 255, 255, 0.6);
@@ -318,7 +353,7 @@ function resetBall() {
   aiY = canvas.height / 2 - paddleHeight / 2;
 }
 
-let coins = 0;
+let coins = 5550;
 let hasSuperCharge = false;
 let superChargeActive = false;
 
@@ -333,28 +368,66 @@ document.getElementById('closeShop').onclick = () => {
 };
 
 // Fonction achat BOUTIQUE ----------------------------
-function buySuperCharge() {
-  let coins = parseInt(localStorage.getItem("coins") || "0");
 
-  if (localStorage.getItem("boughtBlueBackground")) {
-    alert("Tu possèdes déjà cet item !");
-    return;
-  }
+function buySuperCharge() {
+  const coinCounter = document.getElementById("coinCounter");
+  let coins = parseInt(coinCounter.textContent.match(/\d+/)[0]);
 
   if (coins >= 100) {
     coins -= 100;
-    localStorage.setItem("coins", coins);
-    localStorage.setItem("boughtBlueBackground", "true");
-    document.getElementById("coinCounter").textContent = "💰 Pièces : " + coins;
+    coinCounter.textContent = `💰 Pièces : ${coins}`;
 
-    // Appliquer le fond bleu maintenant
-    document.body.style.background = "linear-gradient(to bottom, #00bfff, #87cefa)";
+    // Changer le fond de la page
+    document.body.style.background = "linear-gradient(to bottom, #0000ff, #a0cfff)";
 
-    alert("Achat effectué ! Fond bleu activé.");
+    // Changer le texte et les styles des boutons généraux
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.style.color = "#0000FF";  // Couleur du texte
+    });
+
+    // Modifier spécifiquement le bouton #shopButton
+    const shopButton = document.getElementById("shopButton");
+
+    // Appliquer le style initial du bouton #shopButton
+    shopButton.style.color = "#0000FF";  // Couleur de texte initiale
+    shopButton.style.backgroundColor = "white";  // Fond initial
+    shopButton.style.transition = "color 0.3s, background-color 0.3s"; // Transition pour le survol
+
+    // Ajouter un événement pour le survol
+    shopButton.addEventListener('mouseenter', () => {
+      shopButton.style.backgroundColor = "#1455b5"; // Fond bleu au survol
+      shopButton.style.color = "white"; // Texte blanc au survol
+    });
+
+    // Réinitialiser l'effet au départ du survol
+    shopButton.addEventListener('mouseleave', () => {
+      shopButton.style.backgroundColor = "white"; // Fond blanc lorsque la souris part
+      shopButton.style.color = "#0000FF"; // Texte violet pour le bouton
+    });
+
+    // Appliquer les modifications de style aux items de la boutique (.shop-item)
+    const shopItems = document.querySelectorAll('.shop-item');
+    shopItems.forEach(item => {
+      item.style.borderColor = "#1455b5";  // Bordure bleue
+      item.style.backgroundColor = "#e0e7f9";  // Fond légèrement bleu pour les items
+      item.style.transition = "all 0.3s"; // Ajout d'une transition pour un effet fluide
+    });
+
+    // Modifier le bouton .buy-button
+    const buyButtons = document.querySelectorAll('.buy-button');
+    buyButtons.forEach(button => {
+      button.style.backgroundColor = "#1455b5"; // Fond bleu pour le bouton
+      button.style.color = "white"; // Texte blanc
+      button.style.transition = "background-color 0.3s, color 0.3s"; // Transition pour un effet fluide
+    });
+
   } else {
     alert("Pas assez de pièces !");
   }
 }
+
+
 
 
 
