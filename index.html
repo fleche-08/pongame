@@ -401,6 +401,17 @@ function buySuperCharge() {
   }
 }
 
+  function activerSonBoutons() {
+    const toc = new Audio('toc.mp3');
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', () => {
+        toc.currentTime = 0; // Recommence le son si plusieurs clics rapides
+        toc.play();
+      });
+    });
+  }
+
+
 function buyYellowTheme() {
   const coinCounter = document.getElementById("coinCounter");
   let coins = parseInt(coinCounter.textContent.match(/\d+/)[0]);
