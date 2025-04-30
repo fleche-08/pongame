@@ -6,266 +6,219 @@
   <title>Pong Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="lettre-p-violette-jaune-scintillante-p-violet-au-milieu_84029-6583-removebg-preview.png">
-  <style>
-/* Overlay flouté */
-#shopOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(5px);
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+<style>
+  /* Overlay flouté */
+  #shopOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(6px);
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+  }
 
-/* Fenêtre boutique */
-#shopMenu {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  width: 400px;
-  text-align: center;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
-}
+  /* Fenêtre boutique */
+  #shopMenu {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: black;
+    min-width: 300px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  }
 
-/* Item boutique */
-.shop-item {
-  border: 2px solid #8a2be2;
-  border-radius: 10px;
-  padding: 15px;
-  margin-top: 15px;
-}
+  /* Item boutique */
+  .shop-item {
+    border: 2px solid #8a2be2;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+  }
 
-/* Bouton achat */
-.buy-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #8a2be2;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
+  /* Bouton achat */
+  .buy-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #8a2be2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
 
-.buy-button:hover {
-  transform: scale(1.05);
-}
+  .buy-button:hover {
+    transform: scale(1.05);
+  }
 
-/* Masqué de base */
-.hidden {
-  display: none;
-}
+  /* Masqué de base */
+  .hidden {
+    display: none;
+  }
 
+  /* Bouton ouverture boutique */
+  #shopButton {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    padding: 7px 14px;
+    font-size: 1.2rem;
+    background-color: white;
+    color: #8a2be2;
+    border: none;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    z-index: 1000;
+  }
 
-#shopButton {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  padding: 7px 14px;
-  font-size: 1.2rem;
-  background-color: white;
-  color: #8a2be2;
-  border: none;
-  border-radius: 11px;
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s;
-  z-index: 1000;
-}
+  #shopButton:hover {
+    transform: scale(1.05);
+    background-color: #be6bfa;
+  }
 
-#shopButton:hover {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  transform: scale(1.05);
-  padding: 7px 14px;
-  font-size: 1.2rem;
-  background-color: white;
-  color: #8a2be2;
-  border: none;
-  border-radius: 11px;
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s;
-  z-index: 1000;
-}
+  /* Corps général */
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to bottom, #8a2be2, #d1b3ff);
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.5s ease;
+  }
 
-#shopButton:hover {
-  background-color: #be6bfa;
-}
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  }
 
-#shopOverlay {
-  display: none; /* utile */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(6px);
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 2000;
-  justify-content: center;
-  align-items: center;
-}
+  .play-button {
+    padding: 15px 40px;
+    font-size: 1.5rem;
+    background-color: white;
+    color: #8a2be2;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s, color 0.5s;
+  }
 
+  .play-button:hover {
+    transform: scale(1.05);
+    background-color: white;
+    color: #8a2be2;
+  }
 
-#shopMenu {
-  background: white;
-  padding: 20px 30px;
-  border-radius: 12px;
-  text-align: center;
-  color: black;
-  min-width: 300px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-}
+  .payment-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px 40px;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #00bfff;
+    box-shadow: 0 0 20px #00bfff80;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+    z-index: 9999;
+  }
 
-    body {
+  canvas {
+    display: none;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    background-color: transparent;
+    transition: opacity 0.5s ease;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(to bottom, #8a2be2, #d1b3ff);
-      font-family: 'Orbitron', sans-serif;
-      color: white;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  #score {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    color: white;
+    pointer-events: none;
+  }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      transition: opacity 0.5s ease;
-    }
+  #gameOverMessage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: white;
+    display: none;
+    text-align: center;
+  }
 
-    h1 {
-      font-size: 4rem;
-      margin-bottom: 40px;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-    }
+  #coinCounter {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+  }
 
-    .play-button {
-      padding: 15px 40px;
-      font-size: 1.5rem;
-      background-color: white;
-      color: #8a2be2;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: transform 0.2s, background-color 0.3s; color 0.5s;
-    }
+  #countdown {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: white;
+    display: none;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  }
 
-.payment-message {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.9);
-  padding: 20px 40px;
-  border-radius: 10px;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #00bfff;
-  box-shadow: 0 0 20px #00bfff80;
-  opacity: 1;
-  transition: opacity 1s ease-in-out;
-  z-index: 9999;
-}
+  #feedback {
+    position: absolute;
+    top: calc(50% + 60px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    color: #ffd700;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
 
-.play-button:hover {
-  padding: 15px 40px;
-  transform: scale(1.05);
-  font-size: 1.5rem;
-  background-color: white;
-  color: #8a2be2;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s, color 0.5s;
-}
-    canvas {
-      display: none;
-      border: 2px solid rgba(255, 255, 255, 0.6);
-      border-radius: 12px;
-      background-color: transparent;
-      transition: opacity 0.5s ease;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
+  #feedback.show {
+    opacity: 1;
+    transform: translate(-50%, -40%);
+  }
+</style>
 
-    #score {
-      position: absolute;
-      top: 20px;
-      width: 100%;
-      text-align: center;
-      font-size: 2rem;
-      color: white;
-      pointer-events: none;
-    }
-
-    #gameOverMessage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 3rem;
-      color: white;
-      display: none;
-      text-align: center;
-    }
-
-#coinCounter {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 18px;
-  color: white;
-  font-weight: bold;
-  z-index: 1000;
-}
-
-
-#countdown {
-  position: absolute;
-  top: 40%; /* Déplace le timer un peu plus haut */
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3rem;
-  color: white;
-  display: none;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-
-    /* Nouveau style pour feedback animé */
-    #feedback {
-      position: absolute;
-      top: calc(50% + 60px); /* un peu en dessous du timer */
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2.5rem;
-      color: #ffd700;
-      opacity: 0;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      pointer-events: none;
-    }
-
-    #feedback.show {
-      opacity: 1;
-      transform: translate(-50%, -40%);
-    }
-  </style>
 </head>
 <body>
 <audio id="scoreSound">
@@ -292,15 +245,25 @@
 <div id="shopOverlay" class="hidden">
   <div id="shopMenu">
     <h2>Boutique</h2>
+    
     <div class="shop-item">
       <h3>Thème bleu</h3>
-      <p>Le thème du jeu deviens bleu</p>
+      <p>Le thème du jeu devient bleu</p>
       <p>Prix : <strong>100 pièces</strong></p>
       <button class="buy-button" onclick="buySuperCharge()">Acheter</button>
     </div>
+
+    <div class="shop-item">
+      <h3>Thème jaune</h3>
+      <p>Le thème du jeu devient rouge</p>
+      <p>Prix : <strong>200 pièces</strong></p>
+      <button class="buy-button" onclick="buyYellowTheme()">Acheter</button>
+    </div>
+
     <button id="closeShop" class="buy-button" style="margin-top:20px;">Fermer</button>
   </div>
 </div>
+
 
 
 <script>
@@ -377,55 +340,110 @@ function buySuperCharge() {
     coins -= 100;
     coinCounter.textContent = `💰 Pièces : ${coins}`;
 
-    // Changer le fond de la page
+    // Fond de page
     document.body.style.background = "linear-gradient(to bottom, #0000ff, #a0cfff)";
 
-    // Changer le texte et les styles des boutons généraux
+    // Tous les boutons
     const buttons = document.querySelectorAll('button');
     buttons.forEach(button => {
-      button.style.color = "#0000FF";  // Couleur du texte
+      button.style.color = "#0000FF";
+      button.style.backgroundColor = "#e0e7f9";
+      button.style.transition = "transform 0.2s ease, background-color 0.3s, color 0.3s";
+      button.style.border = "none"; // facultatif
+
+      // Supprimer anciens effets
+      button.onmouseenter = null;
+      button.onmouseleave = null;
+
+      button.addEventListener("mouseenter", () => {
+        button.style.backgroundColor = "#c0d7f5";
+        button.style.transform = "scale(1.05)"; // Zoom léger
+      });
+
+      button.addEventListener("mouseleave", () => {
+        button.style.backgroundColor = "#e0e7f9";
+        button.style.transform = "scale(1)"; // Retour taille normale
+      });
     });
 
-    // Modifier spécifiquement le bouton #shopButton
-    const shopButton = document.getElementById("shopButton");
-
-    // Appliquer le style initial du bouton #shopButton
-    shopButton.style.color = "#0000FF";  // Couleur de texte initiale
-    shopButton.style.backgroundColor = "white";  // Fond initial
-    shopButton.style.transition = "color 0.3s, background-color 0.3s"; // Transition pour le survol
-
-    // Ajouter un événement pour le survol
-    shopButton.addEventListener('mouseenter', () => {
-      shopButton.style.backgroundColor = "#1455b5"; // Fond bleu au survol
-      shopButton.style.color = "white"; // Texte blanc au survol
-    });
-
-    // Réinitialiser l'effet au départ du survol
-    shopButton.addEventListener('mouseleave', () => {
-      shopButton.style.backgroundColor = "white"; // Fond blanc lorsque la souris part
-      shopButton.style.color = "#0000FF"; // Texte violet pour le bouton
-    });
-
-    // Appliquer les modifications de style aux items de la boutique (.shop-item)
+    // Styles pour les items de la boutique
     const shopItems = document.querySelectorAll('.shop-item');
     shopItems.forEach(item => {
-      item.style.borderColor = "#1455b5";  // Bordure bleue
-      item.style.backgroundColor = "#e0e7f9";  // Fond légèrement bleu pour les items
-      item.style.transition = "all 0.3s"; // Ajout d'une transition pour un effet fluide
+      item.style.borderColor = "#1455b5";
+      item.style.backgroundColor = "#e0e7f9";
+      item.style.transition = "all 0.3s";
     });
 
-    // Modifier le bouton .buy-button
-    const buyButtons = document.querySelectorAll('.buy-button');
+    // Boutons de paiement
+    const buyButtons = document.querySelectorAll('.payement-message');
     buyButtons.forEach(button => {
-      button.style.backgroundColor = "#1455b5"; // Fond bleu pour le bouton
-      button.style.color = "white"; // Texte blanc
-      button.style.transition = "background-color 0.3s, color 0.3s"; // Transition pour un effet fluide
+      button.style.backgroundColor = "#1455b5";
+      button.style.color = "#1455b5";
+      button.style.transition = "transform 0.2s ease, background-color 0.3s, color 0.3s";
+
+      button.onmouseenter = null;
+      button.onmouseleave = null;
+
+      button.addEventListener("mouseenter", () => {
+        button.style.backgroundColor = "#c0d7f5";
+        button.style.transform = "scale(1.05)";
+      });
+
+      button.addEventListener("mouseleave", () => {
+        button.style.backgroundColor = "#e0e7f9";
+        button.style.transform = "scale(1)";
+      });
     });
 
   } else {
     alert("Pas assez de pièces !");
   }
 }
+
+function buyYellowTheme() {
+  const coinCounter = document.getElementById("coinCounter");
+  let coins = parseInt(coinCounter.textContent.match(/\d+/)[0]);
+
+  if (coins >= 200) {
+    coins -= 200;
+    coinCounter.textContent = `💰 Pièces : ${coins}`;
+
+    // Appliquer le thème rouge
+    document.body.style.background = "linear-gradient(to bottom, #8B0000, #FF6347)"; // rouge foncé à tomate
+
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.style.color = "#8B0000"; // rouge foncé
+      button.style.backgroundColor = "#ffe4e1"; // rose clair (presque blanc cassé)
+      button.style.transition = "transform 0.2s ease, background-color 0.3s, color 0.3s";
+      button.style.border = "none";
+
+      button.onmouseenter = null;
+      button.onmouseleave = null;
+
+      button.addEventListener("mouseenter", () => {
+        button.style.backgroundColor = "#fa8072"; // saumon
+        button.style.transform = "scale(1.05)";
+      });
+
+      button.addEventListener("mouseleave", () => {
+        button.style.backgroundColor = "#ffe4e1";
+        button.style.transform = "scale(1)";
+      });
+    });
+
+    const shopItems = document.querySelectorAll('.shop-item');
+    shopItems.forEach(item => {
+      item.style.borderColor = "#FF4500"; // orange rouge
+      item.style.backgroundColor = "#fff0f0"; // fond très clair tirant vers le rouge
+      item.style.transition = "all 0.3s";
+    });
+
+  } else {
+    alert("Pas assez de pièces !");
+  }
+}
+
 
 
 
