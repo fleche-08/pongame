@@ -267,6 +267,7 @@
 
 
 <script>
+  const hoverSound = new Audio("https://TON_UTILISATEUR.github.io/TON_REPO/toc.mp3");
   const scoreSound = new Audio("pongamemarqué.MP3"); // mets le bon chemin
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
@@ -422,6 +423,8 @@ function buyYellowTheme() {
       button.onmouseleave = null;
 
       button.addEventListener("mouseenter", () => {
+        hoverSound.currentTime = 0;
+        hoverSound.play();
         button.style.backgroundColor = "#fa8072"; // saumon
         button.style.transform = "scale(1.05)";
       });
