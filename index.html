@@ -267,7 +267,8 @@
 
 
 <script>
-  const hoverSound = new Audio("toc.mp3");
+const hoverSound = new Audio('toc.mp3');
+hoverSound.volume = 0.5;
   const scoreSound = new Audio("pongamemarqué.MP3"); // mets le bon chemin
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
@@ -357,6 +358,7 @@ function buySuperCharge() {
       button.onmouseleave = null;
 
       button.addEventListener("mouseenter", () => {
+        hoverSound.play();
         button.style.backgroundColor = "#c0d7f5";
         button.style.transform = "scale(1.05)"; // Zoom léger
       });
@@ -386,6 +388,7 @@ function buySuperCharge() {
       button.onmouseleave = null;
 
       button.addEventListener("mouseenter", () => {
+        hoverSound.play();
         button.style.backgroundColor = "#c0d7f5";
         button.style.transform = "scale(1.05)";
       });
@@ -412,6 +415,7 @@ function buySuperCharge() {
   }
 
 
+
 function buyYellowTheme() {
   const coinCounter = document.getElementById("coinCounter");
   let coins = parseInt(coinCounter.textContent.match(/\d+/)[0]);
@@ -434,6 +438,7 @@ function buyYellowTheme() {
       button.onmouseleave = null;
 
       button.addEventListener("mouseenter", () => {
+        hoverSound.play();
         hoverSound.currentTime = 0;
         hoverSound.play();
         button.style.backgroundColor = "#fa8072"; // saumon
