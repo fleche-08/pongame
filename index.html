@@ -539,7 +539,7 @@ playBtn.addEventListener('click', () => {
     ) {
       ballSpeedX = Math.abs(ballSpeedX);
       ballSpeedY = Math.random() * 4 - 2;
-      ennemiesound.play(); // ✅ Joue le son ici 1
+      renvoyersound.play(); // ✅ Joue le son ici 1
     }
 
     if (
@@ -549,7 +549,7 @@ playBtn.addEventListener('click', () => {
     ) {
       ballSpeedX = -Math.abs(ballSpeedX);
       ballSpeedY = Math.random() * 4 - 2;
-      renvoyersound.play(); // ✅ Joue le son ici 1
+      sound.play(); // ✅ Joue le son ici 1
     }
 
     if (ballX < 0) {
