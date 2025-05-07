@@ -269,11 +269,14 @@
 
 
 <script>
-const hoverSound = new Audio('toc.mp3');
-hoverSound.volume = 0.5;
-  const scoreSound3 = new Audio("renvoyersound.MP3"); // mets le bon chemin
-  const scoreSound2 = new Audio("sound.MP3"); // mets le bon chemin
-  const scoreSound1 = new Audio("pongamemarqué.MP3"); // mets le bon chemin
+  const hoverSound = new Audio('toc.mp3');
+  hoverSound.volume = 0.5;
+
+  const scoreSound1 = new Audio("pongamemarqué.MP3"); // point marqué
+  const scoreSound2 = new Audio("sound.MP3");         // rebond joueur
+  const scoreSound3 = new Audio("renvoyersound.MP3"); // rebond IA
+
+  // Préparation des éléments DOM
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
   const canvas = document.getElementById('pong');
@@ -503,80 +506,88 @@ playBtn.addEventListener('click', () => {
 
 
 
-  function drawRect(x, y, w, h, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
+function drawRect(x, y, w, h, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, w, h);
+}
+
+function drawBall(x, y, size, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x, y, size, 0, Math.PI * 2, false);
+  ctx.fill();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawRect(10, playerY, paddleWidth, paddleHeight, 'white');
+  drawRect(canvas.width - 20, aiY, paddleWidth, paddleHeight, 'white');
+  drawBall(ballX, ballY, ballSize, 'white');
+}
+
+function update() {
+  if (!gameRunning) return;
+
+  ballX += ballSpeedX;
+  ballY += ballSpeedY;
+
+  // Rebond haut/bas
+  if (ballY <= 0 || ballY + ballSize >= canvas.height) {
+    ballSpeedY *= -1;
   }
 
-  function drawBall(x, y, size, color) {
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(x, y, size, 0, Math.PI * 2, false);
-    ctx.fill();
+  // Collision avec le joueur
+  if (
+    ballX <= 20 &&
+    ballY + ballSize >= playerY &&
+    ballY <= playerY + paddleHeight
+  ) {
+    ballSpeedX = Math.abs(ballSpeedX);
+    ballSpeedY = Math.random() * 4 - 2;
+    scoreSound2.play(); // son rebond joueur
   }
 
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawRect(10, playerY, paddleWidth, paddleHeight, 'white');
-    drawRect(canvas.width - 20, aiY, paddleWidth, paddleHeight, 'white');
-    drawBall(ballX, ballY, ballSize, 'white');
+  // Collision avec l'IA
+  if (
+    ballX + ballSize >= canvas.width - 20 &&
+    ballY + ballSize >= aiY &&
+    ballY <= aiY + paddleHeight
+  ) {
+    ballSpeedX = -Math.abs(ballSpeedX);
+    ballSpeedY = Math.random() * 4 - 2;
+    scoreSound3.play(); // son rebond IA
   }
 
-  function update() {
-    if (!gameRunning) return;
-
-    ballX += ballSpeedX;
-    ballY += ballSpeedY;
-
-    if (ballY <= 0 || ballY + ballSize >= canvas.height) {
-      ballSpeedY *= -1;
+  // Point pour l'IA
+  if (ballX < 0) {
+    aiScore++;
+    updateScore();
+    checkGameOver();
+    if (gameRunning) {
+      resetBall();
+      showCountdown();
     }
-
-    if (
-      ballX <= 20 &&
-      ballY + ballSize >= playerY &&
-      ballY <= playerY + paddleHeight
-    ) {
-      ballSpeedX = Math.abs(ballSpeedX);
-      ballSpeedY = Math.random() * 4 - 2;
-      renvoyersound.play(); // ✅ Joue le son ici 1
-    }
-
-    if (
-      ballX + ballSize >= canvas.width - 20 &&
-      ballY + ballSize >= aiY &&
-      ballY <= aiY + paddleHeight
-    ) {
-      ballSpeedX = -Math.abs(ballSpeedX);
-      ballSpeedY = Math.random() * 4 - 2;
-      sound.play(); // ✅ Joue le son ici 1
-    }
-
-    if (ballX < 0) {
-      aiScore++;
-      updateScore();
-      checkGameOver();
-      if (gameRunning) {
-        resetBall(); // On remet la balle à sa position de départ ici
-        showCountdown(); // Puis on lance le décompte
-      }
-    }
-
-    if (ballX > canvas.width) {
-      playerScore++;
-      updateScore();
-      showFeedback();
-      checkGameOver();
-      if (gameRunning) {
-        resetBall(); // On remet la balle à sa position de départ ici
-        showCountdown(); // Puis on lance le décompte
-      }
-    }
-
-    const aiCenter = aiY + paddleHeight / 2;
-    aiY += aiCenter < ballY ? 1.2 : -1.2;
-    aiY = Math.max(0, Math.min(canvas.height - paddleHeight, aiY));
   }
+
+  // Point pour le joueur
+  if (ballX > canvas.width) {
+    playerScore++;
+    scoreSound1.play(); // son point marqué
+    updateScore();
+    showFeedback();
+    checkGameOver();
+    if (gameRunning) {
+      resetBall();
+      showCountdown();
+    }
+  }
+
+  // Mouvement IA simple
+  const aiCenter = aiY + paddleHeight / 2;
+  aiY += aiCenter < ballY ? 1.2 : -1.2;
+  aiY = Math.max(0, Math.min(canvas.height - paddleHeight, aiY));
+}
+
 
   function updateScore() {
     scoreDisplay.textContent = `${playerScore} : ${aiScore}`;
