@@ -576,7 +576,6 @@ function update() {
   // Point pour l'IA (balle sort côté joueur)
   if (ballX < 0) {
     aiScore++;
-    playSound("pongamemarqué.MP3", 1);
     updateScore();
     checkGameOver();
     if (gameRunning) {
