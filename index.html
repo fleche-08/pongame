@@ -272,7 +272,7 @@
 const hoverSound = new Audio('sound.MP3');
 hoverSound.volume = 0.5;
 
-function playSound(src, volume = 1.5) {
+function playSound(src, volume = 1) {
   const s = new Audio(src);
   s.volume = volume;
   s.play();
@@ -546,7 +546,7 @@ function update() {
   ) {
     ballSpeedX = Math.abs(ballSpeedX);
     ballSpeedY = Math.random() * 4 - 2;
-    playSound("sound.MP3", 1.5);
+    playSound("sound.MP3", 1);
   }
 
   // Collision avec l'IA (droite)
@@ -557,7 +557,7 @@ function update() {
   ) {
     ballSpeedX = -Math.abs(ballSpeedX);
     ballSpeedY = Math.random() * 4 - 2;
-    playSound("renvoyersound.MP3", 1.5);
+    playSound("renvoyersound.MP3", 1);
   }
 
   // Point pour le joueur (balle sort côté IA)
