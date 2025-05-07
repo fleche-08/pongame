@@ -271,6 +271,7 @@
 <script>
 const hoverSound = new Audio('toc.mp3');
 hoverSound.volume = 0.5;
+  const renvoyersound = new Audio("pongrenvoyer.MP3"); // mets le bon chemin
   const scoreSound = new Audio("pongamemarqué.MP3"); // mets le bon chemin
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
@@ -546,6 +547,7 @@ playBtn.addEventListener('click', () => {
     ) {
       ballSpeedX = -Math.abs(ballSpeedX);
       ballSpeedY = Math.random() * 4 - 2;
+      renvoyersound.play(); // ✅ Joue le son ici
     }
 
     if (ballX < 0) {
@@ -561,6 +563,7 @@ playBtn.addEventListener('click', () => {
     if (ballX > canvas.width) {
       playerScore++;
       scoreSound.play();
+      renvoyersound.play(); // ✅ Joue le son ici
       updateScore();
       showFeedback();
       checkGameOver();
