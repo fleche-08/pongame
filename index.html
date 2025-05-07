@@ -546,7 +546,7 @@ function update() {
   ) {
     ballSpeedX = Math.abs(ballSpeedX);
     ballSpeedY = Math.random() * 4 - 2;
-    playSound("sound.MP3", 1);
+    playSound("sound.MP3", 1.5);
   }
 
   // Collision avec l'IA (droite)
@@ -557,7 +557,7 @@ function update() {
   ) {
     ballSpeedX = -Math.abs(ballSpeedX);
     ballSpeedY = Math.random() * 4 - 2;
-    playSound("renvoyersound.MP3", 1);
+    playSound("renvoyersound.MP3", 1.5);
   }
 
   // Point pour le joueur (balle sort côté IA)
