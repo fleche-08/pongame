@@ -533,50 +533,51 @@ function update() {
   ballX += ballSpeedX;
   ballY += ballSpeedY;
 
-  // Rebond haut/bas
+  // Rebond haut / bas
   if (ballY <= 0 || ballY + ballSize >= canvas.height) {
     ballSpeedY *= -1;
   }
 
-  // Collision avec le joueur
-if (
-  ballX <= 20 &&
-  ballY + ballSize >= playerY &&
-  ballY <= playerY + paddleHeight
-) {
-  ballSpeedX = Math.abs(ballSpeedX);
-  ballSpeedY = Math.random() * 4 - 2;
-  playSound("sound.MP3", 1); // son joueur
-}
-
-if (
-  ballX + ballSize >= canvas.width - 20 &&
-  ballY + ballSize >= aiY &&
-  ballY <= aiY + paddleHeight
-) {
-  ballSpeedX = -Math.abs(ballSpeedX);
-  ballSpeedY = Math.random() * 4 - 2;
-  playSound("renvoyersound.MP3", 1); // son IA
-}
-
-if (ballX > canvas.width) {
-  playerScore++;
-  playSound("pongamemarqué.MP3", 1); // point joueur
-  updateScore();
-  showFeedback();
-  checkGameOver();
-  if (gameRunning) {
-    resetBall();
-    showCountdown();
+  // Collision avec le joueur (gauche)
+  if (
+    ballX <= 20 &&
+    ballY + ballSize >= playerY &&
+    ballY <= playerY + paddleHeight
+  ) {
+    ballSpeedX = Math.abs(ballSpeedX);
+    ballSpeedY = Math.random() * 4 - 2;
+    playSound("sound.MP3", 1);
   }
-}
 
-  // Point pour le joueur
+  // Collision avec l'IA (droite)
+  if (
+    ballX + ballSize >= canvas.width - 20 &&
+    ballY + ballSize >= aiY &&
+    ballY <= aiY + paddleHeight
+  ) {
+    ballSpeedX = -Math.abs(ballSpeedX);
+    ballSpeedY = Math.random() * 4 - 2;
+    playSound("renvoyersound.MP3", 1);
+  }
+
+  // Point pour le joueur (balle sort côté IA)
   if (ballX > canvas.width) {
     playerScore++;
-    scoreSound1.play(); // son point marqué
+    playSound("pongamemarqué.MP3", 1);
     updateScore();
     showFeedback();
+    checkGameOver();
+    if (gameRunning) {
+      resetBall();
+      showCountdown();
+    }
+  }
+
+  // Point pour l'IA (balle sort côté joueur)
+  if (ballX < 0) {
+    aiScore++;
+    playSound("pongamemarqué.MP3", 1);
+    updateScore();
     checkGameOver();
     if (gameRunning) {
       resetBall();
@@ -590,10 +591,9 @@ if (ballX > canvas.width) {
   aiY = Math.max(0, Math.min(canvas.height - paddleHeight, aiY));
 }
 
-
-  function updateScore() {
-    scoreDisplay.textContent = `${playerScore} : ${aiScore}`;
-  }
+function updateScore() {
+  scoreDisplay.textContent = `${playerScore} : ${aiScore}`;
+}
 
 
 
