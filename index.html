@@ -269,12 +269,14 @@
 
 
 <script>
-  const hoverSound = new Audio('toc.mp3');
-  hoverSound.volume = 0.5;
+const hoverSound = new Audio('sound.MP3');
+hoverSound.volume = 0.5;
 
-  const scoreSound1 = new Audio("pongamemarqué.MP3"); // point marqué
-  const scoreSound2 = new Audio("sound.MP3");         // rebond joueur
-  const scoreSound3 = new Audio("renvoyersound.MP3"); // rebond IA
+function playSound(src, volume = 0.5) {
+  const s = new Audio(src);
+  s.volume = volume;
+  s.play();
+}
 
   // Préparation des éléments DOM
   const playBtn = document.getElementById('playBtn');
@@ -537,37 +539,37 @@ function update() {
   }
 
   // Collision avec le joueur
-  if (
-    ballX <= 20 &&
-    ballY + ballSize >= playerY &&
-    ballY <= playerY + paddleHeight
-  ) {
-    ballSpeedX = Math.abs(ballSpeedX);
-    ballSpeedY = Math.random() * 4 - 2;
-    scoreSound2.play(); // son rebond joueur
-  }
+if (
+  ballX <= 20 &&
+  ballY + ballSize >= playerY &&
+  ballY <= playerY + paddleHeight
+) {
+  ballSpeedX = Math.abs(ballSpeedX);
+  ballSpeedY = Math.random() * 4 - 2;
+  playSound("sound.MP3"); // son joueur
+}
 
-  // Collision avec l'IA
-  if (
-    ballX + ballSize >= canvas.width - 20 &&
-    ballY + ballSize >= aiY &&
-    ballY <= aiY + paddleHeight
-  ) {
-    ballSpeedX = -Math.abs(ballSpeedX);
-    ballSpeedY = Math.random() * 4 - 2;
-    scoreSound3.play(); // son rebond IA
-  }
+if (
+  ballX + ballSize >= canvas.width - 20 &&
+  ballY + ballSize >= aiY &&
+  ballY <= aiY + paddleHeight
+) {
+  ballSpeedX = -Math.abs(ballSpeedX);
+  ballSpeedY = Math.random() * 4 - 2;
+  playSound("renvoyersound.MP3"); // son IA
+}
 
-  // Point pour l'IA
-  if (ballX < 0) {
-    aiScore++;
-    updateScore();
-    checkGameOver();
-    if (gameRunning) {
-      resetBall();
-      showCountdown();
-    }
+if (ballX > canvas.width) {
+  playerScore++;
+  playSound("pongamemarqué.MP3"); // point joueur
+  updateScore();
+  showFeedback();
+  checkGameOver();
+  if (gameRunning) {
+    resetBall();
+    showCountdown();
   }
+}
 
   // Point pour le joueur
   if (ballX > canvas.width) {
