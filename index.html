@@ -546,6 +546,7 @@ playBtn.addEventListener('click', () => {
       ballX + ballSize >= canvas.width - 20 &&
       ballY + ballSize >= aiY &&
       ballY <= aiY + paddleHeight
+      ennemiesound.play(); // ✅ Joue le son ici 1
     ) {
       ballSpeedX = -Math.abs(ballSpeedX);
       ballSpeedY = Math.random() * 4 - 2;
