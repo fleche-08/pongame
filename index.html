@@ -538,6 +538,7 @@ playBtn.addEventListener('click', () => {
     ) {
       ballSpeedX = Math.abs(ballSpeedX);
       ballSpeedY = Math.random() * 4 - 2;
+      renvoyersound.play(); // ✅ Joue le son ici 1
     }
 
     if (
@@ -547,7 +548,7 @@ playBtn.addEventListener('click', () => {
     ) {
       ballSpeedX = -Math.abs(ballSpeedX);
       ballSpeedY = Math.random() * 4 - 2;
-      renvoyersound.play(); // ✅ Joue le son ici
+      renvoyersound.play(); // ✅ Joue le son ici 2
     }
 
     if (ballX < 0) {
@@ -563,7 +564,6 @@ playBtn.addEventListener('click', () => {
     if (ballX > canvas.width) {
       playerScore++;
       scoreSound.play();
-      renvoyersound.play(); // ✅ Joue le son ici
       updateScore();
       showFeedback();
       checkGameOver();
