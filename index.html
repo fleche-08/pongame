@@ -269,10 +269,8 @@
 
 
 <script>
-const hoverSound = new Audio('toc.mp3'); 
+const hoverSound = new Audio('toc.mp3');
 hoverSound.volume = 0.5;
-  const ennemiesound = new Audio("ennemiesound.MP3"); // mets le bon chemin
-  const renvoyersound = new Audio("sound.MP3"); // mets le bon chemin
   const scoreSound = new Audio("pongamemarqué.MP3"); // mets le bon chemin
   const playBtn = document.getElementById('playBtn');
   const menu = document.getElementById('menu');
@@ -539,18 +537,15 @@ playBtn.addEventListener('click', () => {
     ) {
       ballSpeedX = Math.abs(ballSpeedX);
       ballSpeedY = Math.random() * 4 - 2;
-      ennemiesound.play(); // ✅ Joue le son ici 1
     }
 
-   if (
+    if (
       ballX + ballSize >= canvas.width - 20 &&
       ballY + ballSize >= aiY &&
       ballY <= aiY + paddleHeight
-      ennemiesound.play(); // ✅ Joue le son ici 1
     ) {
       ballSpeedX = -Math.abs(ballSpeedX);
       ballSpeedY = Math.random() * 4 - 2;
-      renvoyersound.play(); // ✅ Joue le son ici 2
     }
 
     if (ballX < 0) {
