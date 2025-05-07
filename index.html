@@ -272,7 +272,7 @@
 const hoverSound = new Audio('sound.MP3');
 hoverSound.volume = 0.5;
 
-function playSound(src, volume = 1) {
+function playSound(src, volume = 1à) {
   const s = new Audio(src);
   s.volume = volume;
   s.play();
@@ -546,7 +546,7 @@ if (
 ) {
   ballSpeedX = Math.abs(ballSpeedX);
   ballSpeedY = Math.random() * 4 - 2;
-  playSound("sound.MP3", 1); // son joueur
+  playSound("sound.MP3", 10); // son joueur
 }
 
 if (
@@ -556,7 +556,7 @@ if (
 ) {
   ballSpeedX = -Math.abs(ballSpeedX);
   ballSpeedY = Math.random() * 4 - 2;
-  playSound("renvoyersound.MP3", 1); // son IA
+  playSound("renvoyersound.MP3", 10); // son IA
 }
 
 if (ballX > canvas.width) {
