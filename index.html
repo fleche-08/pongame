@@ -224,7 +224,7 @@
 <audio id="scoreSound">
   <source src="pongamemarqué.MP3" type="audio/mpeg">
 </audio>
-<audio id="bgMusic">
+<audio id="bgMusic" loop volume="0.2">
   <source src="pangya-teatime.mp3" type="audio/mpeg">
   Ton navigateur ne supporte pas l’audio HTML5.
 </audio>
@@ -269,19 +269,6 @@
 
 
 <script>
-const bgMusic = document.getElementById("bgMusic");
-bgMusic.volume = 0.2;
-bgMusic.play().catch((e) => {
-  console.warn("Musique non lancée automatiquement :", e);
-});
-
-// Quand la 1ère musique se termine, change la source et rejoue
-bgMusic.addEventListener("ended", () => {
-  bgMusic.src = "10 AM - Animal Crossing New Horizons Soundtrack.mp3";
-  bgMusic.loop = true; // maintenant, boucle sur celle-ci si tu veux
-  bgMusic.play();
-});
-
 const hoverSound = new Audio('sound.MP3');
 hoverSound.volume = 0.5;
 
